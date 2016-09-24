@@ -24,7 +24,7 @@ grammar = r"""
 """
 parser = nltk.RegexpParser(grammar)
 
-print "Hi, My name is Sunny leone ;).Im ur sex slave. When can i do u"
+print "Hi My name is Arya, How can I help you??"
 reply = raw_input()
 chunked = parser.parse(tagger.tag(word_tokenizer.tokenize(reply)))
 #print chunked
@@ -93,17 +93,17 @@ def parseJson(qType,Subject,keywords):
     with open('KnowledgeBase.json') as data_file:
         KB_JSON = json.load(data_file)
     #print KB_JSON
-    if qType not in KB_JSON:
+    if qType.lower() not in KB_JSON:
         raise ValueError("Ask a question!!!")
-    X = KB_JSON[qType]
+    X = KB_JSON[qType.lower()]
     #print X
     should_restart = True
     while should_restart:
         should_restart = False
         for i in keywords:
             try:
-                if i in X:
-                    X = X[i]
+                if i.lower() in X:
+                    X = X[i.lower()]
                     should_restart = True
                     break
             except:
