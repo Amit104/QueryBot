@@ -24,7 +24,7 @@ grammar = r"""
 """
 parser = nltk.RegexpParser(grammar)
 
-print "Hi My name is Arya, How can I help you??"
+print "Hi My name is Arya, What's yours?"
 reply = raw_input()
 chunked = parser.parse(tagger.tag(word_tokenizer.tokenize(reply)))
 #print chunked
