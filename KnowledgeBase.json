@@ -1,1 +1,45 @@
-{"How":{"many":{"recruit":"About 50","SIGs":5,"projects":"I don't know","girls":30,"default":"About a 100"}}}
+{
+  "what":{
+    "default":"It is a tecg club.",
+    "events":"Innovision",
+    "yantras":"Sanga, Vidyut, Karyavarta, Saahitya",
+    "sanganitra":"Tech SIG",
+    "vidyut":"Electronic SIG",
+    "vidyarthi":"Go teach english",
+    "shiksha":"Go teach Computers.",
+    "apprentice":"Flagship event.",
+    "flagship":{
+      "event":"Apprentice"
+    },
+    "innovision":"Tech fest.",
+    "initiatives":"Whatever",
+    "projects":"A few",
+    "benefits":"God knows",
+    "mafia":"Outdated games",
+    "recritment":"Criteria"
+    },
+
+  "how": {
+    "many": {
+      "recruit": "About 50",
+      "sigs": 5,
+      "projects": "I don't know",
+      "girls": 30,
+      "meetings":{
+        "week":"around 2",
+        "month":"around 10",
+        "default":"I dont know but we do have around 2 a week"
+      },
+      "default": "About a 100"
+    },
+    "different": {
+      "default": "Its cooler!!"
+    },
+    "get":{
+      "default":"crack the interviews!!"
+    },
+    "recruit":{
+      "default":"There are interview rounds"
+    }
+  }
+}
