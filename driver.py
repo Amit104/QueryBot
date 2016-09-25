@@ -1,30 +1,6 @@
-import re
-import nltk
-import os
-import sys
-import readline
-import json
-from pprint import pprint
-from Train import *
-from xml.dom.minidom import parseString
+import initializations
 
-reload(sys)
-sys.setdefaultencoding("utf-8")
-
-sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-word_tokenizer = nltk.tokenize.TreebankWordTokenizer()
-
-default_tagger = nltk.UnigramTagger(uni_words, backoff=nltk.data.load(nltk.tag._POS_TAGGER))
-tagger = nltk.BigramTagger(bi_words, backoff=default_tagger)
-
-grammar = r"""
-        NP: {<NNP>+}
-        QP: {<W.*>}
-        SUB:{<DEP>+|<CLUB>+}
-"""
-parser = nltk.RegexpParser(grammar)
-
-print "Hi My name is Arya, How can I help you??"
+print "Hi My name is Arya, What's yours?"
 reply = raw_input()
 chunked = parser.parse(tagger.tag(word_tokenizer.tokenize(reply)))
 #print chunked
@@ -61,16 +37,24 @@ def getName(chunked):
         name = raw_input()
         return getName(parser.parse(tagger.tag(word_tokenizer.tokenize(name))))
 Name_User = getName(chunked)
+chat_log = open("Chatlogs/"+Name_User+"_"+str(datetime.datetime.now()),"w+")
 
-def getQuestion(chunked):
+def getQuestion(question):
     try:
-        for subtree in chunked.subtrees(filter=lambda t: t.label() == 'QP'):
-            Question = " ".join(str(tup[0]) for tup in subtree.leaves())
-        return Question
+        qWord = None
+        part_q = filter(None, re.split("[,\-!?:.]+", question))
+        for que in part_q:
+            words = word_tokenizer.tokenize(que)
+            if words[0].lower() in qWords:
+                qWord = words[0].lower()
+        if qWord:
+            return qWord
+        else:
+            raise Exception
     except:
-        print "You didn't ask a Question!! Ask me something"
-        q = raw_input()
-        return getQuestion(parser.parse(tagger.tag(word_tokenizer.tokenize(q))))
+        print "Please ask a question."
+        return getQuestion(raw_input())
+
 
 def getKeywords(arg1,arg2,sent):
     q = []
@@ -109,9 +93,13 @@ def parseJson(qType,Subject,keywords):
             except:
                 break
     try:
-        print X['default']
+        return X['default']
     except:
-        print X
+        return X
+
+def getRandom(list):
+    return random.choice(list)
+
 
 
 Current_Context = "NITK"
@@ -119,19 +107,29 @@ print "Hi " + Name_User + ", How can I be of assistance?"
 while(True):
     try:
         question = raw_input(">> ")
+        chat_log.write("QUESTION: " + question + "\n")
+
         if question.upper() == "QUIT":
+            chat_log.close()
             break
         try:
             question = question.replace("this",Current_Context)
         except:
             pass
-        question = removeStop(question)
-        #print (tagger.tag(question))
-        chunked = parser.parse(tagger.tag(question))
-        qType = getQuestion(chunked)
+        print (tagger.tag(word_tokenizer.tokenize(question)))
+        qType = getQuestion(question)
+
+        chunked = parser.parse(tagger.tag(word_tokenizer.tokenize(question)))
         subject = getSubject(chunked)
         Current_Context = subject
+
+        question = removeStop(question)
         keywords = getKeywords(qType, subject,question)
-        parseJson(qType,subject,keywords)
-    except:
+
+        answer = parseJson(qType,subject,keywords)
+        print answer
+        chat_log.write("ANSWER: " + answer + "\n")
+
+    except Exception, e:
+        chat_log.write("ERROR: " + str(e) + "\n")
         continue
